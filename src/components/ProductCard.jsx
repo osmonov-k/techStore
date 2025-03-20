@@ -16,7 +16,7 @@ const ProductCard = ({ product, discount }) => {
       )}
 
       <Link to={`/products/${product.asin}`} className="block flex-grow">
-        {/* Square image container with fitted image */}
+        {/* Image container */}
         <div className="w-full h-40 overflow-hidden rounded-t-lg">
           <img
             src={product.image}
@@ -24,7 +24,6 @@ const ProductCard = ({ product, discount }) => {
             className="w-full h-full object-cover"
           />
         </div>
-        {/* Smaller text and spacing */}
         <h3 className="text-lg font-semibold mt-2 line-clamp-2">
           {product.title}
         </h3>
@@ -38,7 +37,6 @@ const ProductCard = ({ product, discount }) => {
         </p>
         <p className="text-gray-500 text-sm">{product.category}</p>
         <div className="text-yellow-500 cursor-pointer text-sm">
-          {/* Smaller star icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-3 w-3 inline-block"
@@ -53,7 +51,7 @@ const ProductCard = ({ product, discount }) => {
           {product.description}
         </p>
       </Link>
-      {/* Smaller button */}
+
       <button
         onClick={() => {
           addToCart(product);

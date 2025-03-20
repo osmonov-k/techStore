@@ -17,9 +17,7 @@ const Header = () => {
   return (
     <header className="bg-[#2D3748] text-white shadow-lg">
       <div className="container mx-auto flex justify-between items-center p-4">
-        {/* Left Side: Logo and Hamburger Menu */}
         <div className="flex items-center space-x-4">
-          {/* Logo */}
           <Link to="/" className="text-xl font-bold">
             Kanat's Tech
           </Link>
@@ -44,7 +42,7 @@ const Header = () => {
             </svg>
           </button>
 
-          {/* Dropdown Menu (Support and Deals) */}
+          {/* Dropdown Menu */}
           <div className="relative hidden md:block">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -92,12 +90,12 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Middle: Search Bar */}
+        {/* Search Bar */}
         <div className="flex-grow mx-4">
           <SearchBar onSearch={handleSearch} />
         </div>
 
-        {/* Right Side: Account, Cart, Language Switch */}
+        {/* Account, Cart, Language Switch */}
         <div className="flex items-center space-x-4">
           {/* Account Icon */}
           <Link to="/account">

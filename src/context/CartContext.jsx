@@ -1,10 +1,13 @@
 import React, { createContext, useContext, useState } from "react";
 
+// Create a context for the cart
 const CartContext = createContext();
 
+// CartProvider component to manage and provide cart state and functions
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
+  // Add a product to the cart, or increase its quantity if already exists
   const addToCart = (product) => {
     setCart((prevCart) => {
       const existingProduct = prevCart.find(
@@ -22,10 +25,12 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  // Remove a product from the cart
   const removeFromCart = (asin) => {
     setCart((prevCart) => prevCart.filter((item) => item.asin !== asin));
   };
 
+  // Update the quantity of a specific product in the cart
   const updateQuantity = (asin, quantity) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -34,6 +39,7 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  // Calculate total price of all items in the cart
   const totalPrice = cart.reduce(
     (total, item) => total + parseFloat(item.price) * item.quantity,
     0
@@ -48,4 +54,5 @@ export const CartProvider = ({ children }) => {
   );
 };
 
+// Custom hook to access the cart context
 export const useCart = () => useContext(CartContext);

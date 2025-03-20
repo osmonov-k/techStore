@@ -39,15 +39,7 @@ const Footer = () => {
                   Projects
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="https://kanatosmon.com/"
-                  target="_blank"
-                  className="hover:text-gray-300 transition-colors duration-200"
-                >
-                  About Me
-                </Link>
-              </li>
+
               <li>
                 <Link
                   to="/contact"
@@ -92,17 +84,6 @@ const Footer = () => {
                   className="hover:text-gray-300 transition-colors duration-200"
                 >
                   GitHub
-                </a>
-              </li>
-              <li className="text-sm flex items-center">
-                <FaTwitter className="mr-2" />
-                <a
-                  href="https://twitter.com/yourhandle"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-gray-300 transition-colors duration-200"
-                >
-                  Twitter
                 </a>
               </li>
             </ul>

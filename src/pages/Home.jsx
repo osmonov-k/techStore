@@ -92,7 +92,7 @@ const Home = () => {
 
   // Filter high-priced products with discounts
   const highPricedProducts = products
-    .filter((product) => parseFloat(product.price) > 500) // Adjust the price threshold as needed
+    .filter((product) => parseFloat(product.price) > 500) // price threshold
     .slice(0, 3) // Limit to 3 products
     .map((product) => ({ ...product, discount: 10 })); // Add a 10% discount
 
@@ -107,11 +107,8 @@ const Home = () => {
 
   return (
     <div className="container mx-auto p-4">
-      {/* Combined Container with Blue Background */}
       <div className="bg-[#2D3748] text-white p-6 rounded-lg mb-12">
-        {/* Grid Layout for Big Savings and Discounts */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {/* Left Side: Big Savings Container */}
           <div className="md:col-span-1 p-6 rounded-lg flex flex-col justify-center">
             <h2 className="text-3xl font-bold mb-4">Big Savings End Friday!</h2>
             <p className="text-xl mb-8">
@@ -125,7 +122,6 @@ const Home = () => {
             </Link>
           </div>
 
-          {/* Right Side: Discounts Container */}
           <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
             {highPricedProducts.map((product) => (
               <ProductCard
@@ -142,7 +138,7 @@ const Home = () => {
           <h2 className="text-3xl font-bold text-center mb-8">
             Shop by Category
           </h2>
-          {/* Left Arrow Button */}
+
           <button
             onClick={() => scrollCategories("left")}
             className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10 text-blue-600"
@@ -162,7 +158,6 @@ const Home = () => {
                 key={category.id}
                 className="flex-shrink-0 w-32 text-center"
               >
-                {/* Image Container */}
                 <div className="relative overflow-hidden rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
                   <img
                     src={category.imgUrl}
@@ -170,7 +165,7 @@ const Home = () => {
                     className="w-32 h-32 object-cover rounded-full"
                   />
                 </div>
-                {/* Category Name */}
+
                 <h3 className="mt-4 text-lg font-bold text-white">
                   {category.name}
                 </h3>
@@ -178,7 +173,6 @@ const Home = () => {
             ))}
           </div>
 
-          {/* Right Arrow Button */}
           <button
             onClick={() => scrollCategories("right")}
             className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10 text-blue-600"

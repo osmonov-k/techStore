@@ -4,6 +4,18 @@ import { parseCSV } from "../utils/csvParser";
 import { Link, useLocation } from "react-router-dom";
 import ProductCard from "./ProductCard";
 
+const categories = [
+  { id: 1, name: "Headphones & Earbuds" },
+  { id: 2, name: "Office Electronics" },
+  { id: 3, name: "Computer Monitors" },
+  { id: 4, name: "Wearable Technology" },
+  { id: 5, name: "Computers" },
+  { id: 6, name: "Computers & Tablets" },
+  { id: 7, name: "Portable Audio & Video" },
+  { id: 8, name: "Camera & Photo" },
+  { id: 9, name: "Cell Phones & Accessories" },
+];
+
 const ProductCatalog = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -19,7 +31,7 @@ const ProductCatalog = () => {
   const categoryQuery = searchParams.get("category") || "";
 
   useEffect(() => {
-    fetch("/products.csv") // Ensure CSV file is in `public/`
+    fetch("/products.csv")
       .then((response) => response.text())
       .then((csvText) => {
         parseCSV(csvText, (data) => {
@@ -30,7 +42,7 @@ const ProductCatalog = () => {
   }, []);
 
   useEffect(() => {
-    let filtered = [...products]; // Create a copy of the products array
+    let filtered = [...products];
 
     // Search by title
     if (searchQuery) {
@@ -115,20 +127,13 @@ const ProductCatalog = () => {
           className="p-2 border rounded w-full md:w-auto"
         >
           <option value="">All Categories</option>
-          <option value="Headphones & Earbuds">Headphones & Earbuds</option>
-          <option value="Office Electronics">Office Electronics</option>
-          <option value="Computer Monitors">Computer Monitors</option>
-          <option value="Wearable Technology">Wearable Technology</option>
-          <option value="Computers">Computers</option>
-          <option value="Computers & Tablets">Computers & Tablets</option>
-          <option value="Portable Audio & Video">Portable Audio & Video</option>
-          <option value="Camera & Photo">Camera & Photo</option>
-          <option value="Cell Phones & Accessories">
-            Cell Phones & Accessories
-          </option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
         </select>
-
-        {/* Price Filter */}
+        ;{/* Price Filter */}
         <input
           type="number"
           placeholder="Max Price"
@@ -136,7 +141,6 @@ const ProductCatalog = () => {
           onChange={(e) => handlePriceFilter(e.target.value)}
           className="p-2 border rounded w-full md:w-auto"
         />
-
         {/* Stars Filter */}
         <input
           type="number"
@@ -146,7 +150,6 @@ const ProductCatalog = () => {
           onChange={(e) => handleStarsFilter(e.target.value)}
           className="p-2 border rounded w-full md:w-auto"
         />
-
         {/* Sort By */}
         <select
           value={sortBy}
@@ -158,7 +161,6 @@ const ProductCatalog = () => {
           <option value="priceHighToLow">Price: High to Low</option>
           <option value="name">Name</option>
         </select>
-
         {/* Reset Filters */}
         <button
           onClick={resetFilters}

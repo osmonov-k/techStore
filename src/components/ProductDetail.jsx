@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import Papa from "papaparse";
 import "react-toastify/dist/ReactToastify.css";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const ProductDetail = () => {
   const { asin } = useParams();
