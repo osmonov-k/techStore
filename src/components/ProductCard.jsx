@@ -19,7 +19,7 @@ const ProductCard = ({ product, discount }) => {
         {/* Image container */}
         <div className="w-full h-40 overflow-hidden rounded-t-lg">
           <img
-            src={product.image}
+            src={product.imgUrl}
             alt={product.title.slice(0, 50)}
             className="w-full h-full object-cover"
           />
