@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
-import SearchBar from "./SearchBar";
 import { parseCSV } from "../utils/csvParser";
-import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import ProductCard from "./ProductCard";
 
 const ProductCatalog = () => {
-  const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
   const [starsFilter, setStarsFilter] = useState("");
   const [sortBy, setSortBy] = useState("");
+
+  // Get the search query and category from the URL
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get("search") || "";
+  const categoryQuery = searchParams.get("category") || "";
 
   useEffect(() => {
     fetch("/products.csv") // Ensure CSV file is in `public/`
@@ -36,10 +39,11 @@ const ProductCatalog = () => {
       );
     }
 
-    // Filter by category
-    if (categoryFilter) {
+    // Filter by category (use categoryFilter if set, otherwise use categoryQuery from URL)
+    const activeCategoryFilter = categoryFilter || categoryQuery;
+    if (activeCategoryFilter) {
       filtered = filtered.filter(
-        (product) => product.category === categoryFilter
+        (product) => product.category === activeCategoryFilter
       );
     }
 
@@ -67,11 +71,15 @@ const ProductCatalog = () => {
     }
 
     setFilteredProducts(filtered); // Update filtered products
-  }, [searchQuery, categoryFilter, priceFilter, starsFilter, sortBy, products]);
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
+  }, [
+    searchQuery,
+    categoryFilter,
+    categoryQuery,
+    priceFilter,
+    starsFilter,
+    sortBy,
+    products,
+  ]);
 
   const handleCategoryFilter = (category) => {
     setCategoryFilter(category);
@@ -91,7 +99,6 @@ const ProductCatalog = () => {
 
   // Reset all filters
   const resetFilters = () => {
-    setSearchQuery(""); // Reset search query
     setCategoryFilter(""); // Reset category filter
     setPriceFilter(""); // Reset price filter
     setStarsFilter(""); // Reset stars filter
@@ -100,10 +107,8 @@ const ProductCatalog = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <SearchBar onSearch={handleSearch} />
       <div className="flex flex-wrap gap-4 mb-4">
-        {" "}
-        {/* Add flex-wrap and gap-4 */}
+        {/* Category Filter */}
         <select
           value={categoryFilter}
           onChange={(e) => handleCategoryFilter(e.target.value)}
@@ -122,6 +127,8 @@ const ProductCatalog = () => {
             Cell Phones & Accessories
           </option>
         </select>
+
+        {/* Price Filter */}
         <input
           type="number"
           placeholder="Max Price"
@@ -129,6 +136,8 @@ const ProductCatalog = () => {
           onChange={(e) => handlePriceFilter(e.target.value)}
           className="p-2 border rounded w-full md:w-auto"
         />
+
+        {/* Stars Filter */}
         <input
           type="number"
           placeholder="Min Stars"
@@ -137,6 +146,8 @@ const ProductCatalog = () => {
           onChange={(e) => handleStarsFilter(e.target.value)}
           className="p-2 border rounded w-full md:w-auto"
         />
+
+        {/* Sort By */}
         <select
           value={sortBy}
           onChange={(e) => handleSort(e.target.value)}
@@ -147,6 +158,8 @@ const ProductCatalog = () => {
           <option value="priceHighToLow">Price: High to Low</option>
           <option value="name">Name</option>
         </select>
+
+        {/* Reset Filters */}
         <button
           onClick={resetFilters}
           className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors duration-200 w-full md:w-auto"
@@ -154,54 +167,11 @@ const ProductCatalog = () => {
           Reset Filters
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      {/* Product Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {filteredProducts.map((product) => (
-          <div
-            key={product.asin}
-            className="border p-4 rounded-lg flex flex-col"
-          >
-            <Link to={`/products/${product.asin}`} className="block flex-grow">
-              <img
-                src={product.imgUrl}
-                alt={product.title}
-                className="w-full h-48 object-cover"
-              />
-              <h3 className="text-xl font-semibold mt-2 line-clamp-2">
-                {" "}
-                {/* Add line-clamp-2 */}
-                {product.title}
-              </h3>
-              <p className="text-gray-700">${product.price}</p>
-              <p className="text-gray-500">{product.category}</p>
-              <div
-                className="text-yellow-500 cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault(); // Prevent navigation
-                  alert(`You clicked ${product.stars} stars!`); // Add your logic here
-                }}
-              >
-                {product.stars} ★
-              </div>
-              <p className="mt-4 text-sm text-gray-600 line-clamp-3">
-                {" "}
-                {/* Truncate description */}
-                {product.description}
-              </p>
-            </Link>
-            <button
-              onClick={() => {
-                addToCart(product);
-                console.log("Adding product to cart:", product.title);
-                toast.success(`${product.title} has been added to the cart!`, {
-                  position: "bottom-right",
-                  autoClose: 3000,
-                });
-              }}
-              className="bg-blue-600 text-white px-4 py-2 mt-4 rounded cursor-pointer hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 w-full"
-            >
-              Add to Cart
-            </button>
-          </div>
+          <ProductCard key={product.asin} product={product} />
         ))}
       </div>
     </div>

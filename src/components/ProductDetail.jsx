@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import Papa from "papaparse";
 import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const ProductDetail = () => {
   const { asin } = useParams();
@@ -43,10 +44,6 @@ const ProductDetail = () => {
               toast.success(`${product.title} has been added to the cart!`, {
                 position: "bottom-right",
                 autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
               });
             }}
             className="bg-blue-600 text-white px-4 py-2 mt-2 rounded cursor-pointer hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200"

@@ -8,6 +8,8 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./components/ProductDetail";
 import { ToastContainer } from "react-toastify";
+import Account from "./pages/Account";
+import SignUp from "./pages/Signup";
 
 function App() {
   return (
@@ -18,10 +20,12 @@ function App() {
           <ToastContainer />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/account" element={<Account />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:asin" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/signup" element={<SignUp />} />
           </Routes>
         </main>
         <Footer />

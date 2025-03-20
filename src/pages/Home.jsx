@@ -1,6 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { parseCSV } from "../utils/csvParser";
+import ProductCard from "../components/ProductCard";
+import ReviewCard from "../components/ReviewCard";
+
+const reviews = [
+  {
+    id: 1,
+    quote:
+      "This is the best e-commerce store I've ever used. The products are high quality, and the delivery is fast!",
+    image: "/customer1.webp",
+    name: "John Smith",
+  },
+  {
+    id: 2,
+    quote:
+      "Amazing deals and excellent customer service. I highly recommend this store!",
+    image: "/customer3.jpg",
+    name: "Jane Clark",
+  },
+  {
+    id: 3,
+    quote:
+      "I love the variety of products available. The discounts are unbeatable!",
+    image: "/customer2.jpg",
+    name: "Adam Johnson",
+  },
+];
+
 const categories = [
   {
     id: 2,
@@ -33,21 +60,22 @@ const categories = [
     imgUrl: "https://m.media-amazon.com/images/I/717CFJ+IFFL._AC_UL320_.jpg",
   },
   {
-    id: 7,
+    id: 8,
     name: "Portable Audio & Video",
     imgUrl: "https://m.media-amazon.com/images/I/51MFP88NpML._AC_UL320_.jpg",
   },
   {
-    id: 7,
+    id: 9,
     name: "Camera & Photo",
     imgUrl: "https://m.media-amazon.com/images/I/7135WIHTxXL._AC_UL320_.jpg",
   },
   {
-    id: 7,
+    id: 10,
     name: "Cell Phones & Accessories",
     imgUrl: "https://m.media-amazon.com/images/I/61sKOoYuOyL._AC_UL320_.jpg",
   },
 ];
+
 const Home = () => {
   const [products, setProducts] = useState([]);
 
@@ -65,7 +93,8 @@ const Home = () => {
   // Filter high-priced products with discounts
   const highPricedProducts = products
     .filter((product) => parseFloat(product.price) > 500) // Adjust the price threshold as needed
-    .slice(0, 4); // Limit to 4 products
+    .slice(0, 3) // Limit to 3 products
+    .map((product) => ({ ...product, discount: 10 })); // Add a 10% discount
 
   // Category scroll functionality
   const scrollCategories = (direction) => {
@@ -78,65 +107,49 @@ const Home = () => {
 
   return (
     <div className="container mx-auto p-4">
-      {/* High-Priced Products & Discounts Section */}
-      <div className="bg-gray-100 p-6 rounded-lg mb-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left Side: Promotional Message */}
-          <div className="md:col-span-1 bg-blue-600 text-white p-6 rounded-lg flex flex-col justify-center">
+      {/* Combined Container with Blue Background */}
+      <div className="bg-[#2D3748] text-white p-6 rounded-lg mb-12">
+        {/* Grid Layout for Big Savings and Discounts */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* Left Side: Big Savings Container */}
+          <div className="md:col-span-1 p-6 rounded-lg flex flex-col justify-center">
             <h2 className="text-3xl font-bold mb-4">Big Savings End Friday!</h2>
             <p className="text-xl mb-8">
               Don't miss out on our exclusive deals. Shop now and save big!
             </p>
             <Link
               to="/products"
-              className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors duration-200 text-center"
+              className="bg-white text-[#2D3748] px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors duration-200 text-center"
             >
               Shop Now
             </Link>
           </div>
 
-          {/* Right Side: High-Priced Products Grid */}
-          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Right Side: Discounts Container */}
+          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
             {highPricedProducts.map((product) => (
-              <div
+              <ProductCard
                 key={product.asin}
-                className="bg-white p-4 rounded-lg shadow-md"
-              >
-                <img
-                  src={product.imgUrl}
-                  alt={product.title}
-                  className="w-full h-48 object-cover rounded-t-lg"
-                />
-                <h3 className="text-xl font-semibold mt-4 line-clamp-2">
-                  {product.title}
-                </h3>
-                <p className="text-gray-700">${product.price}</p>
-                <p className="text-red-600 font-semibold">20% OFF</p>{" "}
-                {/* Adjust discount as needed */}
-                <button className="bg-blue-600 text-white px-4 py-2 mt-4 rounded w-full hover:bg-blue-700 transition-colors duration-200">
-                  Add to Cart
-                </button>
-              </div>
+                product={product}
+                discount={product.discount}
+              />
             ))}
           </div>
         </div>
-      </div>
 
-      {/* Shop by Category Section */}
-      <div className="my-12">
-        <h2 className="text-3xl font-bold text-center mb-8">
-          Shop by Category
-        </h2>
+        {/* Shop by Category Section */}
         <div className="relative">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Shop by Category
+          </h2>
           {/* Left Arrow Button */}
           <button
             onClick={() => scrollCategories("left")}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10 text-blue-600"
           >
             &larr;
           </button>
 
-          {/* Categories Container */}
           {/* Categories Container */}
           <div
             id="category-container"
@@ -147,18 +160,18 @@ const Home = () => {
               <Link
                 to={`/products?category=${category.name}`}
                 key={category.id}
-                className="flex-shrink-0 w-48 text-center" // Center align content
+                className="flex-shrink-0 w-32 text-center"
               >
                 {/* Image Container */}
                 <div className="relative overflow-hidden rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
                   <img
                     src={category.imgUrl}
                     alt={category.name}
-                    className="w-48 h-48 object-cover rounded-full" // Make the image round
+                    className="w-32 h-32 object-cover rounded-full"
                   />
                 </div>
                 {/* Category Name */}
-                <h3 className="mt-4 text-xl font-bold text-gray-800">
+                <h3 className="mt-4 text-lg font-bold text-white">
                   {category.name}
                 </h3>
               </Link>
@@ -168,7 +181,7 @@ const Home = () => {
           {/* Right Arrow Button */}
           <button
             onClick={() => scrollCategories("right")}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10 text-blue-600"
           >
             &rarr;
           </button>
@@ -176,26 +189,21 @@ const Home = () => {
       </div>
 
       {/* Testimonials Section */}
-      <div className="my-12 bg-gray-100 py-12 px-6">
+      <div className="my-12 bg-gray-100 py-12 px-6 rounded-lg">
         <h2 className="text-3xl font-bold text-center mb-8">
           What Our Customers Say
         </h2>
+        {}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1, 2, 3].map((item) => (
-            <div key={item} className="bg-white p-6 rounded-lg shadow-md">
-              <p className="text-gray-700 italic">
-                "This is the best e-commerce store I've ever used. The products
-                are high quality, and the delivery is fast!"
-              </p>
-              <p className="mt-4 font-semibold">- Customer {item}</p>
-            </div>
+          {reviews.map((testimonial) => (
+            <ReviewCard key={testimonial.id} testimonial={testimonial} />
           ))}
         </div>
       </div>
 
       {/* Call-to-Action Section */}
-      <div className="bg-blue-600 text-white py-12 px-6 text-center">
-        <h2 className="text-3xl font-bold mb-4">Ready to Explore?</h2>
+      <div className="bg-[#2D3748] text-white py-16 px-6 text-center rounded-lg">
+        <h2 className="text-4xl font-bold mb-4">Ready to Explore?</h2>
         <p className="text-xl mb-8">
           Sign up now and get 10% off your first order!
         </p>
